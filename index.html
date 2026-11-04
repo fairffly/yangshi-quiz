@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d2b4e">
+<title>杨氏模量 · 课前预习检测</title>
+<style>
+  :root{
+    --ink:#12243c;
+    --muted:#6b7c93;
+    --line:#e3e9f2;
+    --bg:#eef3f9;
+    --card:#ffffff;
+    --primary:#0f4c81;
+    --primary-2:#1668a8;
+    --teal:#0d9488;
+    --gold:#c88a2e;
+    --ok:#15803d;
+    --bad:#c0392b;
+    --shadow:0 12px 30px rgba(18,36,60,.10);
+    --shadow-sm:0 2px 8px rgba(18,36,60,.06);
+    --radius:20px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 85% -10%, #dbeafe 0%, rgba(219,234,254,0) 60%),
+      radial-gradient(900px 500px at -10% 110%, #d7f2ec 0%, rgba(215,242,236,0) 55%),
+      var(--bg);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:18px 16px 40px;padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+
+  /* ---------- brand ---------- */
+  .brand{display:flex;align-items:center;gap:12px;margin:6px 0 16px}
+  .mark{
+    width:44px;height:44px;border-radius:13px;flex:0 0 auto;
+    background:linear-gradient(150deg,#123f6b,#0e7490);
+    color:#fff;display:grid;place-items:center;font-weight:700;font-size:19px;
+    box-shadow:0 8px 18px rgba(15,76,129,.28);letter-spacing:.5px
+  }
+  .brand h1{font-size:17px;line-height:1.25;margin:0;font-weight:650;letter-spacing:.2px}
+  .brand p{margin:3px 0 0;font-size:12px;color:var(--muted);letter-spacing:.4px}
+
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.7)}
+
+  /* ---------- start ---------- */
+  .hero{padding:26px 22px 22px}
+  .eyebrow{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--teal);font-weight:600;letter-spacing:1px}
+  .eyebrow::before{content:"";width:18px;height:2px;background:var(--teal);border-radius:2px}
+  .hero h2{font-size:26px;line-height:1.32;margin:12px 0 10px;letter-spacing:.4px;font-weight:700}
+  .hero h2 span{color:var(--primary)}
+  .lead{color:var(--muted);font-size:14px;line-height:1.75;margin:0 0 18px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+  .chip{font-size:12px;padding:6px 11px;border-radius:999px;background:#f3f7fc;color:#31567c;border:1px solid #e2ebf5}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .field label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px 2px}
+  .field input{
+    width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);
+    background:#fbfcfe;font-size:16px;color:var(--ink);outline:none;transition:.18s
+  }
+  .field input:focus{border-color:#9dc3e6;background:#fff;box-shadow:0 0 0 4px rgba(22,104,168,.08)}
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-family:inherit;font-weight:600;
+    border-radius:13px;padding:13px 18px;font-size:15px;transition:transform .12s ease, box-shadow .18s, background .18s
+  }
+  .btn:active{transform:translateY(1px) scale(.995)}
+  .btn.primary{background:linear-gradient(140deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 10px 22px rgba(15,76,129,.24)}
+  .btn.primary:disabled{opacity:.45;box-shadow:none}
+  .btn.block{width:100%;padding:15px 18px;font-size:16px}
+  .btn.ghost{background:#f2f6fb;color:#28527a}
+  .btn.outline{background:#fff;border:1px solid var(--line);color:#28527a}
+  .hint{text-align:center;font-size:12px;color:#8b9bb0;margin:12px 0 0}
+  .divider{height:1px;background:var(--line);margin:18px 0}
+
+  /* ---------- quiz ---------- */
+  .screen{display:none;animation:in .28s ease both}
+  .screen.active{display:block}
+  @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin:2px 2px 10px;font-size:12px;color:var(--muted)}
+  .topbar b{color:var(--ink);font-size:13px}
+  .timer{font-variant-numeric:tabular-nums;background:#fff;border:1px solid var(--line);padding:5px 10px;border-radius:999px;box-shadow:var(--shadow-sm)}
+  .timer.warn{color:#b45309;border-color:#fde3c0;background:#fffaf2}
+  .progress{height:6px;border-radius:99px;background:#e6edf6;overflow:hidden;margin:0 2px 14px}
+  .progress i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#0f4c81,#14b8a6);transition:width .3s ease}
+
+  .qcard{padding:22px 20px 8px;margin-bottom:14px}
+  .qtag{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.6px;color:#0f766e;background:#ecfdf5;border:1px solid #d1fae5;padding:4px 9px;border-radius:999px;margin-bottom:12px}
+  .qtext{font-size:16.5px;line-height:1.85;margin:0 0 16px;letter-spacing:.2px;font-weight:550}
+  .options{display:grid;gap:10px;padding-bottom:16px}
+  .opt{
+    display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;cursor:pointer;
+    background:#fbfcfe;border:1px solid var(--line);border-radius:14px;padding:14px 14px;font-family:inherit;
+    font-size:14.5px;line-height:1.65;color:#1f3550;transition:.16s
+  }
+  .opt .k{
+    flex:0 0 auto;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+    background:#eef3f9;color:#3d6187;font-weight:700;font-size:13px;transition:.16s
+  }
+  .opt:hover{border-color:#bcd6ec;background:#fff}
+  .opt.sel{border-color:var(--primary);background:#f2f8ff;box-shadow:0 0 0 3px rgba(22,104,168,.09)}
+  .opt.sel .k{background:var(--primary);color:#fff}
+  .opt.correct{border-color:#86d3ae;background:#f5fdf8}
+  .opt.correct .k{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:#e7a9a2;background:#fff7f6}
+  .opt.wrong .k{background:var(--bad);color:#fff}
+  .opt.dim{opacity:.62}
+
+  .nav{display:flex;gap:10px;margin:0 0 14px}
+  .nav .btn{flex:1}
+  .dots{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;padding:4px 0 8px}
+  .dot{
+    width:26px;height:26px;border-radius:9px;border:1px solid var(--line);background:#fff;
+    font-size:11px;color:#78909c;display:grid;place-items:center;cursor:pointer;font-family:inherit;padding:0
+  }
+  .dot.done{background:#e8f1fa;border-color:#cfe0f1;color:#2c5b85;font-weight:600}
+  .dot.cur{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:700;box-shadow:0 4px 10px rgba(15,76,129,.25)}
+  .dot.answered{box-shadow:inset 0 -3px 0 #9dc3e6}
+
+  /* ---------- result ---------- */
+  .score-card{padding:26px 20px 20px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
+  .score-card::after{
+    content:"";position:absolute;inset:auto -30% -60% -30%;height:180px;
+    background:radial-gradient(closest-side,rgba(20,184,166,.14),rgba(20,184,166,0));pointer-events:none
+  }
+  .ring{
+    width:150px;height:150px;margin:2px auto 14px;border-radius:50%;
+    display:grid;place-items:center;position:relative;
+    background:conic-gradient(var(--ringc) calc(var(--p)*1%), #e8eef6 0);
+  }
+  .ring::before{content:"";position:absolute;inset:11px;border-radius:50%;background:#fff;box-shadow:inset 0 2px 8px rgba(18,36,60,.06)}
+  .ring .val{position:relative;font-size:40px;font-weight:800;letter-spacing:-1px;line-height:1}
+  .ring .val small{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0;display:block;margin-top:6px}
+  .grade{font-size:15px;font-weight:700;margin:0 0 4px;color:var(--primary)}
+  .grade-sub{font-size:13px;color:var(--muted);margin:0}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+  .stat{background:#f7fafd;border:1px solid var(--line);border-radius:14px;padding:12px 8px}
+  .stat b{display:block;font-size:18px;font-weight:750;font-variant-numeric:tabular-nums}
+  .stat span{font-size:11.5px;color:var(--muted)}
+
+  .section{padding:20px}
+  .section h3{font-size:15px;margin:0 0 4px;letter-spacing:.3px}
+  .section .sub{font-size:12px;color:var(--muted);margin:0 0 16px;line-height:1.6}
+  .grid-answers{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .ans{
+    border-radius:12px;padding:9px 0 8px;text-align:center;border:1px solid var(--line);background:#fbfcfe;
+    font-size:11px;color:var(--muted)
+  }
+  .ans b{display:block;font-size:15px;margin-bottom:2px;color:var(--ink)}
+  .ans.ok{background:#f2fbf6;border-color:#bfe8d2}
+  .ans.ok b{color:var(--ok)}
+  .ans.no{background:#fff6f5;border-color:#f0c8c2}
+  .ans.no b{color:var(--bad)}
+  .ans.miss{background:#fffaf0;border-color:#f5dfb8}
+  .ans.miss b{color:#b45309}
+
+  .review-item{border-top:1px solid var(--line);padding:16px 0 4px}
+  .review-item:first-of-type{border-top:0;padding-top:6px}
+  .rq{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.7;margin:0 0 10px}
+  .badge{flex:0 0 auto;font-size:11px;font-weight:700;border-radius:7px;padding:3px 8px;margin-top:2px}
+  .badge.ok{background:#e8f7ee;color:var(--ok)}
+  .badge.no{background:#fdecea;color:var(--bad)}
+  .badge.miss{background:#fff4e2;color:#b45309}
+  .ansline{font-size:13px;color:#40597a;background:#f7fafd;border:1px solid var(--line);border-radius:11px;padding:10px 12px;line-height:1.7}
+  .ansline b{color:var(--ok)}
+  .ansline s{color:var(--bad);text-decoration:none;font-weight:600}
+  .exp{font-size:13px;line-height:1.8;color:#41566f;margin:10px 0 0}
+  .exp .tag{display:inline-block;font-size:11px;color:#0f766e;background:#ecfdf5;border-radius:6px;padding:2px 7px;margin-right:6px}
+  .exp .src{display:block;font-size:11.5px;color:#93a4b8;margin-top:6px}
+
+  .actions{display:grid;gap:10px;margin-top:16px}
+  .actions.row{grid-template-columns:1fr 1fr}
+  .foot{text-align:center;font-size:11.5px;color:#93a4b8;margin-top:22px;line-height:1.8}
+
+  /* ---------- modal / toast ---------- */
+  .mask{position:fixed;inset:0;background:rgba(12,28,46,.42);backdrop-filter:blur(3px);display:none;place-items:center;padding:20px;z-index:50}
+  .mask.show{display:grid}
+  .modal{background:#fff;border-radius:18px;padding:22px 20px 18px;max-width:340px;width:100%;box-shadow:0 24px 60px rgba(9,30,66,.3);text-align:center}
+  .modal h4{margin:0 0 8px;font-size:16px}
+  .modal p{margin:0 0 18px;font-size:13.5px;color:var(--muted);line-height:1.7}
+  .modal .actions{grid-template-columns:1fr 1fr;margin-top:0}
+  .toast{
+    position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translate(-50%,20px);
+    background:#12243c;color:#fff;font-size:13px;padding:11px 18px;border-radius:999px;opacity:0;
+    transition:.25s;pointer-events:none;z-index:80;box-shadow:0 10px 30px rgba(0,0,0,.25)
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width:380px){
+    .fields{grid-template-columns:1fr}
+    .hero h2{font-size:23px}
+    .ring{width:132px;height:132px}
+    .ring .val{font-size:34px}
+  }
+  @media print{
+    body{background:#fff}
+    .nav,.dots,.actions,.topbar,.brand{display:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="mark">E</div>
+    <div>
+      <h1>杨氏模量 · 课前预习检测</h1>
+      <p>拉伸法测量金属丝的杨氏模量｜单项选择 10 题</p>
+    </div>
+  </div>
+
+  <!-- ============ START ============ -->
+  <section id="screen-start" class="screen active">
+    <div class="card hero">
+      <div class="eyebrow">预习知识检测</div>
+      <h2>先测一测，<span>带着问题进课堂</span></h2>
+      <p class="lead">覆盖杨氏模量的定义、光杠杆放大法、实验仪器、实验内容与数据处理五个部分，共 10 题。提交后立即给出分数、逐题解析与错题清单。</p>
+      <div class="chips">
+        <span class="chip">10 题 × 10 分</span>
+        <span class="chip">满分 100</span>
+        <span class="chip">建议 10 分钟</span>
+        <span class="chip">提交即评分</span>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label for="inp-class">班级（选填）</label>
+          <input id="inp-class" type="text" placeholder="如：物教 242" autocomplete="off" maxlength="20">
+        </div>
+        <div class="field">
+          <label for="inp-name">姓名（选填）</label>
+          <input id="inp-name" type="text" placeholder="填写后成绩单更完整" autocomplete="off" maxlength="20">
+        </div>
+      </div>
+      <button id="btn-start" class="btn primary block">开始答题</button>
+      <p class="hint">共 10 题，每题只有一个正确选项；未作答按 0 分计。</p>
+    </div>
+    <p class="foot">题目与解析来源：课堂预习资料《拉伸法测量金属丝的杨氏模量》</p>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="screen-quiz" class="screen">
+    <div class="topbar">
+      <span>第 <b id="q-idx">1</b> / 10 题</span>
+      <span id="timer" class="timer">00:00</span>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+
+    <div class="card qcard">
+      <div class="qtag" id="q-tag">杨氏模量的定义</div>
+      <p class="qtext" id="q-text"></p>
+      <div class="options" id="q-opts"></div>
+    </div>
+
+    <div class="nav">
+      <button id="btn-prev" class="btn ghost">上一题</button>
+      <button id="btn-next" class="btn primary">下一题</button>
+    </div>
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <!-- ============ RESULT ============ -->
+  <section id="screen-result" class="screen">
+    <div class="card score-card">
+      <div class="ring" id="ring" style="--p:0;--ringc:#0f4c81">
+        <div class="val"><span id="score-num">0</span><small>分 / 100</small></div>
+      </div>
+      <p class="grade" id="grade">—</p>
+      <p class="grade-sub" id="grade-sub"></p>
+      <div class="stats">
+        <div class="stat"><b id="st-ok">0</b><span>答对</span></div>
+        <div class="stat"><b id="st-no">0</b><span>答错</span></div>
+        <div class="stat"><b id="st-time">00:00</b><span>用时</span></div>
+      </div>
+    </div>
+
+    <div class="card section">
+      <h3>答题卡</h3>
+      <p class="sub" id="who-line">—</p>
+      <div class="grid-answers" id="answer-grid"></div>
+    </div>
+
+    <div class="card section">
+      <h3>逐题解析</h3>
+      <p class="sub">正确选项已标出，答错的题先看一遍解析，再回到课件对应位置复习。</p>
+      <div id="review"></div>
+    </div>
+
+    <div class="actions row">
+      <button id="btn-copy" class="btn outline">复制成绩单</button>
+      <button id="btn-again" class="btn ghost">再测一次</button>
+    </div>
+    <div class="actions">
+      <button id="btn-print" class="btn outline">打印 / 存为 PDF</button>
+    </div>
+    <p class="foot" id="foot-note">成绩保存在本机课堂服务器，仅用于本节课的预习统计，不会上传到互联网。</p>
+  </section>
+</div>
+
+<div class="mask" id="mask">
+  <div class="modal">
+    <h4 id="modal-title">还有题目没有作答</h4>
+    <p id="modal-text">未作答的题目按 0 分计，确定现在提交吗？</p>
+    <div class="actions">
+      <button class="btn ghost" id="modal-cancel">继续作答</button>
+      <button class="btn primary" id="modal-ok">确定提交</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var LETTERS = ["A", "B", "C", "D"];
+
+  var QUIZ = [
+    {
+      tag: "杨氏模量的定义",
+      q: "拉伸法中，杨氏模量定义为应力与应变之比，即 E =（F/S）÷（ΔL/L）。下列关于杨氏模量 E 的说法，正确的是（　　）",
+      o: {
+        A: "杨氏模量随所加拉力的增大而增大",
+        B: "应变 ΔL/L 的单位是 N/m²，应力 F/S 则没有单位",
+        C: "杨氏模量的单位是 N·m，与力矩的单位相同",
+        D: "杨氏模量是材料的固有属性，相同应力下 E 越大，材料越不易发生形变"
+      },
+      a: "D",
+      exp: "杨氏模量由材料本身决定，是材料的固有属性（托马斯·杨 1807 年提出“弹性模量是物体的固有属性”），与所加拉力的大小、金属丝的粗细长短无关。应力的单位是 N/m²（Pa），应变 ΔL/L 是长度与长度之比，无量纲，所以 E 的单位也是 N/m²（Pa），不是 N·m。由 E = 应力 / 应变可知，相同应力下 E 越大，应变越小，材料越不容易发生形变。",
+      src: "对应课件：3.1 杨氏模量的定义"
+    },
+    {
+      tag: "光杠杆放大法",
+      q: "光杠杆常数（后足尖到两前足尖连线的垂直距离）为 b，平面镜到标尺的距离为 D。金属丝伸长 ΔL 使镜面转过微小角度时，标尺读数的变化量 x 与 ΔL 的关系是（　　）",
+      o: {
+        A: "x =（b / 2D）ΔL",
+        B: "x =（D / b）ΔL",
+        C: "x =（2D / b）ΔL",
+        D: "x =（2b / D）ΔL"
+      },
+      a: "C",
+      exp: "镜面转过 θ 时，由几何关系 ΔL = b·θ（θ 很小）得 θ = ΔL / b；根据光的反射定律，入射光方向不变时反射光线转过 2θ，于是在距离 D 的标尺上产生 x = D·2θ =（2D / b）ΔL 的位移，放大倍率为 2D / b。实验中 D 常以米计、b 只有几厘米，因此能把微米级的伸长放大成标尺上可读的明显变化。",
+      src: "对应课件：3.2 光杠杆放大法的原理"
+    },
+    {
+      tag: "实验仪器",
+      q: "本实验测量金属丝直径 d，应选用的量具及其分度值是（　　）",
+      o: {
+        A: "螺旋测微器，0.001 mm",
+        B: "游标卡尺，0.02 mm",
+        C: "钢卷尺，0.5 mm",
+        D: "米尺，1 mm"
+      },
+      a: "A",
+      exp: "金属丝直径只有零点几毫米，而 E 与 d² 成反比，d 的相对误差会在结果中被放大一倍，必须用螺旋测微器（0.001 mm）测量。测量时在上、中、下三处分别沿两个互相垂直的方向各测一次，共 6 次，记录零点读数，并估读到分度值以下一位。钢卷尺用于测 L 和 D，游标卡尺用于测光杠杆常数 b。",
+      src: "对应课件：实验仪器；五个测量之“测量金属丝直径 d”"
+    },
+    {
+      tag: "金属丝长度 L",
+      q: "用钢卷尺测量公式中的金属丝长度 L 时，正确的测量区间是（　　）",
+      o: {
+        A: "上、下夹具的外端面之间",
+        B: "上夹具下表面到下夹具上表面之间",
+        C: "整根金属丝的长度，包括两端被夹持的部分",
+        D: "光杠杆前足与后足之间的距离"
+      },
+      a: "B",
+      exp: "公式中的 L 是参与伸长的金属丝长度，因此取上夹具下表面到下夹具上表面之间的距离。被夹具夹持的部分不会产生可测量的伸长，若计入会使 L 偏大、E 的计算结果偏大。测量时注意钢卷尺尺面拉直放平、与金属丝平行。",
+      src: "对应课件：五个测量之“测量金属丝长度”"
+    },
+    {
+      tag: "光杠杆常数 b",
+      q: "用印记法测量光杠杆常数 b 时，b 指的是（　　）",
+      o: {
+        A: "两前足尖之间的距离",
+        B: "后足尖到平面镜镜面的距离",
+        C: "平面镜的宽度",
+        D: "后足尖到两前足尖连线的垂直距离"
+      },
+      a: "D",
+      exp: "光杠杆常数 b 是后足尖到两前足尖连线的垂直距离，也就是镜面转动时的“力臂”。印记法的做法：把光杠杆平放在白纸上，标记出三个足尖的位置，连接两前足尖，从后足尖向该连线作垂线，用直尺或游标卡尺测量垂线长度，多次测量取平均值。注意游标卡尺不估读。",
+      src: "对应课件：五个测量之“测量光杠杆常数”"
+    },
+    {
+      tag: "仪器调节",
+      q: "正式读数之前，先在托盘上加一个砝码（该级不计入测量数据），其主要目的是（　　）",
+      o: {
+        A: "把金属丝预先拉直，消除初始弯曲带来的额外形变",
+        B: "使标尺读数恰好指在零刻度线上",
+        C: "增大金属丝的横截面积，使形变更明显",
+        D: "使光杠杆的后足尖脱离金属丝，避免摩擦"
+      },
+      a: "A",
+      exp: "金属丝初始可能有轻微弯曲，若直接加载，最初一段伸长会消耗在“拉直”上而不是产生弹性形变，使测得的 ΔL 偏大、E 偏小。预加一个砝码可把金属丝拉直，从第二级开始记录数据。同一环节还要调节底脚螺丝使水准仪气泡居中，保证两支柱铅直、固定平台水平。",
+      src: "对应课件：三个调节之“杨氏模量测量仪的调节”"
+    },
+    {
+      tag: "测量方法",
+      q: "对同一级载荷，分别记录“加砝码”和“减砝码”时的标尺读数，再取两者平均值，这样做主要是为了（　　）",
+      o: {
+        A: "增加数据点的数目，便于画出图像",
+        B: "消除砝码质量不准确带来的误差",
+        C: "减小摩擦、弹性滞后和回程误差等系统误差的影响",
+        D: "使金属丝在每一级载荷下都充分伸长"
+      },
+      a: "C",
+      exp: "实验装置存在摩擦、弹性滞后和回程误差，同一载荷下“加砝码”与“减砝码”的读数并不相同，两者之差正是回程误差的反映。取正、反两程读数的平均值，可以显著减小这类系统误差，提高杨氏模量测量的准确度。读数还应待金属丝稳定后进行。",
+      src: "对应课件：6.1 测量标尺读数；注意事项"
+    },
+    {
+      tag: "数据处理",
+      q: "用最小二乘法处理“砝码重力 F—标尺读数 x”的数据时，其拟合判据是（　　）",
+      o: {
+        A: "使拟合直线穿过尽可能多的实验点",
+        B: "使拟合直线的斜率取到最大值",
+        C: "直接用首、末两个实验点的连线作为拟合直线",
+        D: "使所有实验点到拟合直线的偏差平方和最小"
+      },
+      a: "D",
+      exp: "最小二乘法是在全部数据中寻找一条直线，使各实验点到该直线的“偏差平方和”最小，从而得到最优线性拟合，再由直线的斜率求出 Δx/ΔF（或 x–F 的斜率），代入公式计算 E。与“首末两点连线”相比，它利用了全部数据，结果更稳定、更可靠。",
+      src: "对应课件：6.2 最小二乘法——全部数据最优线性拟合"
+    },
+    {
+      tag: "注意事项",
+      q: "开始加载砝码前，望远镜中标尺的初始读数应调在（　　）",
+      o: {
+        A: "标尺量程的正中间",
+        B: "零刻度线以上 1 cm 左右",
+        C: "零刻度线以下",
+        D: "任意位置，只要成像清晰即可"
+      },
+      a: "C",
+      exp: "加载砝码后金属丝伸长，标尺读数单调增大。若初始读数偏高，加到后面几级砝码时读数就会超出标尺量程，数据无法补齐。所以加载前的初始读数应调在零刻度线以下，保证全程读数都落在标尺范围内。测量中还要保持装置和桌面稳定，切勿按压桌面或增减桌面物品。",
+      src: "对应课件：注意事项 1"
+    },
+    {
+      tag: "不确定度",
+      q: "按本实验的数据处理规范，不确定度一般保留 1～2 位有效数字；当不确定度的首位数字是 1 或 2 时，通常（　　）",
+      o: {
+        A: "只保留 1 位有效数字",
+        B: "保留 2 位有效数字",
+        C: "保留 3 位有效数字",
+        D: "小数位数与测量值保持一致即可"
+      },
+      a: "B",
+      exp: "不确定度首位是 1 或 2 时建议保留 2 位，如 0.143 保留为 0.14；首位 ≥3 时通常保留 1 位，如 0.32 保留为 0.3。报道实验结果时，测量值有效数字的末位必须与不确定度的末位对齐，例如 E =（2.0 ± 0.1）×10¹¹ N/m²。",
+      src: "对应课件：6.3 计算不确定度"
+    }
+  ];
+
+  var TOTAL = QUIZ.length;
+  var PER = 10;
+
+  var state = {
+    idx: 0,
+    answers: new Array(TOTAL).fill(null),
+    start: 0,
+    elapsed: 0,
+    timer: null,
+    finished: false,
+    student: { cls: "", name: "" }
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var screens = {
+    start: $("screen-start"),
+    quiz: $("screen-quiz"),
+    result: $("screen-result")
+  };
+
+  function show(name) {
+    Object.keys(screens).forEach(function (k) {
+      screens[k].classList.toggle("active", k === name);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function fmtClock(sec) {
+    var m = Math.floor(sec / 60), s = sec % 60;
+    return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  /* ---------------- start ---------------- */
+  $("btn-start").addEventListener("click", function () {
+    state.student.cls = $("inp-class").value.trim();
+    state.student.name = $("inp-name").value.trim();
+    state.idx = 0;
+    state.answers = new Array(TOTAL).fill(null);
+    state.start = Date.now();
+    state.finished = false;
+    startTimer();
+    renderQuestion();
+    show("quiz");
+  });
+
+  function startTimer() {
+    clearInterval(state.timer);
+    state.timer = setInterval(function () {
+      var sec = Math.floor((Date.now() - state.start) / 1000);
+      var t = $("timer");
+      t.textContent = fmtClock(sec);
+      t.classList.toggle("warn", sec >= 600);
+    }, 1000);
+  }
+
+  /* ---------------- question ---------------- */
+  function renderQuestion() {
+    var i = state.idx, q = QUIZ[i];
+    $("q-idx").textContent = i + 1;
+    $("q-tag").textContent = q.tag;
+    $("q-text").textContent = (i + 1) + ". " + q.q;
+
+    var box = $("q-opts");
+    box.innerHTML = "";
+    LETTERS.forEach(function (L) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "opt" + (state.answers[i] === L ? " sel" : "");
+      b.setAttribute("data-k", L);
+      b.innerHTML = '<span class="k">' + L + '</span><span>' + q.o[L] + "</span>";
+      b.addEventListener("click", function () { pick(L); });
+      box.appendChild(b);
+    });
+
+    $("bar").style.width = ((i + 1) / TOTAL * 100).toFixed(1) + "%";
+    $("btn-prev").disabled = i === 0;
+    $("btn-prev").style.opacity = i === 0 ? 0.4 : 1;
+    var last = i === TOTAL - 1;
+    $("btn-next").textContent = last ? "提交并评分" : "下一题";
+    renderDots();
+  }
+
+  function renderDots() {
+    var d = $("dots");
+    d.innerHTML = "";
+    for (var i = 0; i < TOTAL; i++) {
+      (function (i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "dot" + (i === state.idx ? " cur" : "") +
+          (state.answers[i] ? " done answered" : "");
+        b.textContent = i + 1;
+        b.addEventListener("click", function () { state.idx = i; renderQuestion(); });
+        d.appendChild(b);
+      })(i);
+    }
+  }
+
+  function pick(L) {
+    state.answers[state.idx] = L;
+    renderQuestion();
+    if (state.idx < TOTAL - 1) {
+      setTimeout(function () {
+        state.idx++;
+        renderQuestion();
+      }, 180);
+    }
+  }
+
+  $("btn-prev").addEventListener("click", function () {
+    if (state.idx > 0) { state.idx--; renderQuestion(); }
+  });
+
+  $("btn-next").addEventListener("click", function () {
+    if (state.idx < TOTAL - 1) {
+      state.idx++;
+      renderQuestion();
+      return;
+    }
+    var missing = state.answers.filter(function (x) { return !x; }).length;
+    if (missing > 0) {
+      $("modal-text").textContent =
+        "还有 " + missing + " 题未作答，未作答按 0 分计。确定现在提交吗？";
+      $("mask").classList.add("show");
+    } else {
+      submit();
+    }
+  });
+
+  $("modal-cancel").addEventListener("click", function () {
+    $("mask").classList.remove("show");
+  });
+  $("modal-ok").addEventListener("click", function () {
+    $("mask").classList.remove("show");
+    submit();
+  });
+
+  /* ---------------- scoring ---------------- */
+  function submit() {
+    if (state.finished) return;
+    state.finished = true;
+    clearInterval(state.timer);
+    state.elapsed = Math.max(1, Math.round((Date.now() - state.start) / 1000));
+    var right = 0;
+    QUIZ.forEach(function (q, i) {
+      if (state.answers[i] === q.a) right++;
+    });
+    var score = right * PER;
+    renderResult(score, right);
+    show("result");
+    sendResult(score, right);
+  }
+
+  function gradeOf(score) {
+    if (score >= 90) return { t: "优秀：概念与原理掌握得很牢", c: "#0d9488", sub: "可以直接进入数据处理与误差分析的深入讨论。" };
+    if (score >= 80) return { t: "良好：基础扎实，个别细节待补", c: "#1668a8", sub: "看看错题解析，重点补齐仪器调节和数据处理环节。" };
+    if (score >= 60) return { t: "及格：主线清楚，细节还需巩固", c: "#c88a2e", sub: "建议回到课件重看光杠杆原理与五个测量量。" };
+    return { t: "需复习：带着问题进课堂", c: "#c0392b", sub: "先通读课件五个部分，再重做一遍这份检测。" };
+  }
+
+  function renderResult(score, right) {
+    var g = gradeOf(score);
+    var ring = $("ring");
+    ring.style.setProperty("--p", score);
+    ring.style.setProperty("--ringc", g.c);
+
+    var num = $("score-num"), cur = 0;
+    var step = Math.max(1, Math.round(score / 22));
+    var tick = setInterval(function () {
+      cur = Math.min(score, cur + step);
+      num.textContent = cur;
+      if (cur >= score) clearInterval(tick);
+    }, 26);
+
+    $("grade").textContent = g.t;
+    $("grade").style.color = g.c;
+    $("grade-sub").textContent = g.sub;
+
+    $("st-ok").textContent = right + " / 10";
+    $("st-no").textContent = (TOTAL - right) + " / 10";
+    $("st-time").textContent = fmtClock(state.elapsed);
+
+    var who = [];
+    if (state.student.cls) who.push("班级：" + state.student.cls);
+    if (state.student.name) who.push("姓名：" + state.student.name);
+    who.push("用时：" + fmtClock(state.elapsed));
+    $("who-line").textContent = who.join("　·　");
+
+    var grid = $("answer-grid");
+    grid.innerHTML = "";
+    QUIZ.forEach(function (q, i) {
+      var mine = state.answers[i];
+      var cls = mine === q.a ? "ok" : (mine ? "no" : "miss");
+      var div = document.createElement("div");
+      div.className = "ans " + cls;
+      div.innerHTML = "<b>" + (mine || "—") + "</b>第 " + (i + 1) + " 题";
+      grid.appendChild(div);
+    });
+
+    var rev = $("review");
+    rev.innerHTML = "";
+    QUIZ.forEach(function (q, i) {
+      var mine = state.answers[i];
+      var ok = mine === q.a;
+      var item = document.createElement("div");
+      item.className = "review-item";
+      var badge = ok ? '<span class="badge ok">正确</span>'
+        : (mine ? '<span class="badge no">答错</span>' : '<span class="badge miss">未答</span>');
+      var ansline = "你的答案：<s>" + (mine || "未作答") + "</s>　正确选项：<b>" + q.a + "</b>　"
+        + q.a + ". " + q.o[q.a];
+      item.innerHTML =
+        '<div class="rq">' + badge + '<span><b>' + (i + 1) + ".</b> " + q.q + "</span></div>" +
+        '<div class="ansline">' + ansline + "</div>" +
+        '<p class="exp"><span class="tag">解析</span>' + q.exp +
+        '<span class="src">' + q.src + "</span></p>";
+      rev.appendChild(item);
+    });
+  }
+
+  function reportText(score, right) {
+    var lines = [];
+    lines.push("【杨氏模量 · 课前预习检测】成绩单");
+    if (state.student.cls) lines.push("班级：" + state.student.cls);
+    if (state.student.name) lines.push("姓名：" + state.student.name);
+    lines.push("得分：" + score + " / 100（答对 " + right + " / 10，用时 " + fmtClock(state.elapsed) + "）");
+    var wrong = [];
+    QUIZ.forEach(function (q, i) {
+      if (state.answers[i] !== q.a) wrong.push((i + 1) + "（正确 " + q.a + "）");
+    });
+    lines.push("错题：" + (wrong.length ? wrong.join("、") : "无，全部答对"));
+    return lines.join("\n");
+  }
+
+  function sendResult(score, right) {
+    try {
+      fetch("api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cls: state.student.cls,
+          name: state.student.name,
+          score: score,
+          right: right,
+          total: TOTAL,
+          seconds: state.elapsed,
+          answers: state.answers,
+          ua: navigator.userAgent
+        })
+      }).catch(function () {});
+    } catch (e) { /* offline / static hosting: ignore */ }
+  }
+
+  $("btn-copy").addEventListener("click", function () {
+    var right = state.answers.filter(function (a, i) { return a === QUIZ[i].a; }).length;
+    var txt = reportText(right * PER, right);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () {
+        toast("成绩单已复制，可直接粘贴发送");
+      }).catch(function () { fallbackCopy(txt); });
+    } else {
+      fallbackCopy(txt);
+    }
+  });
+
+  function fallbackCopy(txt) {
+    var ta = document.createElement("textarea");
+    ta.value = txt;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); toast("成绩单已复制"); }
+    catch (e) { toast("复制失败，请长按选择文字"); }
+    document.body.removeChild(ta);
+  }
+
+  $("btn-again").addEventListener("click", function () {
+    state.idx = 0;
+    state.answers = new Array(TOTAL).fill(null);
+    state.finished = false;
+    show("start");
+  });
+
+  $("btn-print").addEventListener("click", function () { window.print(); });
+
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2200);
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (!screens.quiz.classList.contains("active")) return;
+    var k = e.key.toUpperCase();
+    if (LETTERS.indexOf(k) >= 0) pick(k);
+    if (e.key === "ArrowRight" && state.idx < TOTAL - 1) { state.idx++; renderQuestion(); }
+    if (e.key === "ArrowLeft" && state.idx > 0) { state.idx--; renderQuestion(); }
+  });
+})();
+</script>
+</body>
+</html>
