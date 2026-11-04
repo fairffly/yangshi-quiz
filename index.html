@@ -739,12 +739,17 @@
   $("btn-print").addEventListener("click", function () { window.print(); });
 
   var toastTimer = null;
-  function toast(msg) {
-    var t = $("toast");
+  function toast(msg) {    var t = $("toast");
     t.textContent = msg;
     t.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2200);
+  }
+
+  // 部署到静态托管（如 GitHub Pages）时没有后端，说明文字换成对应文案
+  if (typeof location !== "undefined" && /\.github\.io$/i.test(location.hostname || "")) {
+    $("foot-note").textContent =
+      "成绩仅保存在本机浏览器，不会上传；可用「复制成绩单」把结果发给老师。";
   }
 
   document.addEventListener("keydown", function (e) {
